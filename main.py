@@ -1,8 +1,20 @@
-def greet(name: str) -> str:
-    return f"Hello, {name}! Welcome to Dezinet CIKSHA."
+from pydantic import ValidationError
 
+from schemas import User
 
-if __name__ == "__main__":
-    message = greet("Bhavneet")
-    print(message)
-    
+user_data = {
+    "name": "Neet",
+    "age": -5,
+    "email": "neet@example.com"
+}
+
+try:
+    user = User.model_validate(user_data)
+    print(user.model_dump())
+
+except ValidationError as e:
+    print("Invalid user data!")
+
+    for error in e.errors():
+        print("Field:", error["loc"])
+        print("Message:", error["msg"])
